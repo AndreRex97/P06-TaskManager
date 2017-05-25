@@ -11,11 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.Calendar;
+import java.util.StringTokenizer;
 
 public class AddActivity extends AppCompatActivity {
     int reqCode = 12345;
     Button btnAddTask, btnCancel;
-    EditText etName, etDescription;
+    EditText etName, etDescription, etDuration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,7 @@ public class AddActivity extends AppCompatActivity {
         btnCancel = (Button)findViewById(R.id.btnCancel);
         etDescription = (EditText)findViewById(R.id.etDescription);
         etName = (EditText)findViewById(R.id.etName);
+        etDuration = (EditText)findViewById(R.id.etDuration);
 
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -40,19 +42,21 @@ public class AddActivity extends AppCompatActivity {
                 Intent i = new Intent();
                 String name = etName.getText().toString();
                 String description = etDescription.getText().toString();
+                String duration = etDuration.getText().toString();
+                int Duration = Integer.parseInt(duration);
+
                 DBHelper db = new DBHelper(AddActivity.this);
                 db.insertTask(name, description);
-                i.putExtra("name", name);
+                Task task = new Task(name, description);
+                i.putExtra("task", task);
                 setResult(RESULT_OK, i);
                 finish();
 
                 Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.SECOND, 5);
+                cal.add(Calendar.SECOND, Duration);
 
                 Intent intent = new Intent(AddActivity.this, MyReceiverTask.class);
                 intent.putExtra("name", name);
-                intent.putExtra("description", description);
-
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(AddActivity.this, reqCode, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
                 AlarmManager am = (AlarmManager)getSystemService(Activity.ALARM_SERVICE);

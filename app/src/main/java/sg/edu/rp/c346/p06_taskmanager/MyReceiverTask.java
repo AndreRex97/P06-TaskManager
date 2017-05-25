@@ -18,12 +18,11 @@ public class MyReceiverTask extends BroadcastReceiver {
         Intent i = new Intent(context, MainActivity.class);
         PendingIntent pIntent = PendingIntent.getActivity(context, reqCode, i, PendingIntent.FLAG_CANCEL_CURRENT);
         String name = intent.getStringExtra("name");
-        String description = intent.getStringExtra("description");
 
         //build notification
         Notification.Builder builder = new Notification.Builder(context);
         builder.setContentTitle(name);
-        builder.setContentText(description);
+        builder.setContentText("Task");
         builder.setSmallIcon(android.R.drawable.ic_dialog_info);
         builder.setContentIntent(pIntent);
         builder.setAutoCancel(true);

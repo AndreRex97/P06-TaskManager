@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
         ta = new TaskAdapter(this, R.layout.row, taskList);
         lvTask.setAdapter(ta);
 
+        displayTask();
+
         btnAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,14 +42,19 @@ public class MainActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
             if (data != null) {
-                DBHelper db = new DBHelper(MainActivity.this);
-                ArrayList<Task> task = db.getAllTasks();
-                db.close();
-                for (int i = 0; i < task.size(); i++){
-                    taskList.add(new Task(task.get(i).getName(), task.get(i).getDescription()));
-                }
-                ta.notifyDataSetChanged();
+                displayTask();
             }
         }
+    }
+
+    public void displayTask() {
+        taskList.clear();
+        DBHelper db = new DBHelper(MainActivity.this);
+        ArrayList<Task> task = db.getAllTasks();
+        db.close();
+        for (int i = 0; i < task.size(); i++){
+            taskList.add(new Task(task.get(i).getName(), task.get(i).getDescription()));
+        }
+        ta.notifyDataSetChanged();
     }
 }
