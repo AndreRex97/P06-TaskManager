@@ -1,11 +1,13 @@
 package sg.edu.rp.c346.p06_taskmanager;
 
 import android.content.Intent;
+import android.support.v4.app.RemoteInput;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -35,6 +37,21 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(i, requestCode);
             }
         });
+
+        CharSequence reply = null;
+        Intent intent = getIntent();
+        Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
+        if (remoteInput != null){
+            reply = remoteInput.getCharSequence("status");
+        }
+
+        if(reply != null && reply.toString().equalsIgnoreCase("Completed")){
+            Intent i = getIntent();
+            Task task = (Task) i.getSerializableExtra("task");
+            Toast.makeText(MainActivity.this, "You have indicated: " + reply,
+                    Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
